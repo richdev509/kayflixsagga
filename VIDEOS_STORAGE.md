@@ -4,7 +4,7 @@
 
 Votre fichier `.env` a :
 ```env
-BUNNY_API_KEY=0c5d804c-16f0-4f4e-9e7a-064a716314a9426fa294-f257-4273-b9da-571b6b9367fe ✅
+BUNNY_API_KEY=0c5d804c-16f0-4f4e-............ ✅
 BUNNY_STREAM_LIBRARY_ID=                                                             ❌ VIDE
 BUNNY_STREAM_CDN_HOSTNAME=                                                           ❌ VIDE
 ```
