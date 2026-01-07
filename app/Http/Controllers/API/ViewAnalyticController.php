@@ -61,7 +61,7 @@ class ViewAnalyticController extends Controller
         try {
             // Récupérer la session depuis la BDD pour avoir video_id, series_id, episode_id
             $viewAnalytic = ViewAnalytic::find($sessionId);
-            
+
             if (!$viewAnalytic) {
                 return response()->json([
                     'success' => false,

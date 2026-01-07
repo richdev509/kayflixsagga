@@ -29,12 +29,12 @@ class TestAnalyticsSeeder extends Seeder
                 foreach ($season->episodes as $episode) {
                     // Créer 3-10 vues par épisode
                     $viewsCount = rand(3, 10);
-                    
+
                     for ($i = 0; $i < $viewsCount; $i++) {
                         $user = $users->random();
                         $durationWatched = rand(300, 3600); // 5 min à 1h
                         $episodeDuration = 2400; // Supposons 40 min par épisode
-                        
+
                         ViewAnalytic::create([
                             'user_id' => $user->id,
                             'video_id' => null, // Pas de video standalone
