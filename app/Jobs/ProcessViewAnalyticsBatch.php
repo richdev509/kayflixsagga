@@ -39,8 +39,9 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
         Log::info('Démarrage du traitement batch des analytics');
 
         // Récupérer les clés Redis pour progression et finalisation
-        $progressKeys = $this->getRedisKeys('view_progress:*');
-        $finalKeys = $this->getRedisKeys('view_final:*');
+        // Utiliser *pattern* pour inclure le préfixe Laravel
+        $progressKeys = $this->getRedisKeys('view_progress');
+        $finalKeys = $this->getRedisKeys('view_final');
 
         $totalProcessed = 0;
 
@@ -72,10 +73,21 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
             DB::beginTransaction();
 
             try {
-                foreach ($chunk as $key) {
+                foreach ($chunk as $fullKey) {
+                    // Extraire le nom de clé simple depuis la clé complète Laravel
+                    // Ex: "laravel-database-laravel-cache-view_final:7" -> "view_final:7"
+                    preg_match('/(view_(?:progress|final):\d+)$/', $fullKey, $matches);
+                    $key = $matches[1] ?? null;
+                    
+                    if (!$key) {
+                        Log::warning("Impossible d'extraire la clé de: {$fullKey}");
+                        continue;
+                    }
+                    
                     $data = cache()->get($key);
 
                     if (!$data || !isset($data['session_id'])) {
+                        Log::warning("Données manquantes pour la clé: {$key}");
                         continue;
                     }
 
@@ -97,6 +109,8 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                     // Supprimer la clé Redis après traitement
                     cache()->forget($key);
                     $processed++;
+                    
+                    Log::info("Session {$data['session_id']} traitée avec succès");
                 }
 
                 DB::commit();
@@ -122,13 +136,21 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
         try {
             $redis = Cache::getRedis();
             $keys = [];
-
-            // Pour Predis
-            if (method_exists($redis, 'keys')) {
-                $keys = $redis->keys($pattern);
+            
+            // Predis supporte keys() via __call(), pas besoin de method_exists
+            $allKeys = $redis->keys('*' . $pattern . '*');
+            
+            // Filtrer pour garder uniquement celles qui correspondent au pattern exact
+            foreach ($allKeys as $key) {
+                // Vérifier que c'est bien view_progress:X ou view_final:X
+                if (preg_match('/' . preg_quote($pattern, '/') . ':\d+/', $key)) {
+                    $keys[] = $key;
+                }
             }
 
-            return is_array($keys) ? $keys : [];
+            Log::info("Clés Redis trouvées pour pattern {$pattern}: " . count($keys));
+
+            return $keys;
 
         } catch (\Exception $e) {
             Log::error('Erreur récupération clés Redis: ' . $e->getMessage());
