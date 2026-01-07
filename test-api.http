@@ -1,0 +1,30 @@
+# Test API Registration
+
+POST http://localhost:8000/api/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+
+###
+
+# Test API Login
+
+POST http://localhost:8000/api/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+# Test Get Me (Replace TOKEN with actual token)
+
+GET http://localhost:8000/api/me
+Authorization: Bearer YOUR_TOKEN_HERE
