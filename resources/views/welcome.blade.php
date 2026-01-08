@@ -1281,7 +1281,7 @@
                 <p>&copy; {{ date('Y') }} Kayflix. Tous droits réservés.</p>
                 <p>La nouvelle ère du streaming premium</p>
                 <p style="margin-top: 20px; font-size: 14px; color: #888;">
-                    Application développée par <strong style="color: var(--primary);">Sagacetech</strong> | 
+                    Application développée par <strong style="color: var(--primary);">Sagacetech</strong> |
                     <a href="tel:+15634680355" style="color: var(--blue-accent); text-decoration: none;">+1 (563) 468-0355</a>
                 </p>
             </div>
