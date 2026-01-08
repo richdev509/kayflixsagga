@@ -164,13 +164,53 @@
                 text-align: center;
                 padding: 120px 20px 60px;
                 position: relative;
+                background:
+                    linear-gradient(to bottom,
+                        rgba(0, 0, 0, 0.3) 0%,
+                        rgba(0, 0, 0, 0.5) 40%,
+                        rgba(0, 0, 0, 0.85) 80%,
+                        #000000 100%
+                    ),
+                    url('{{ asset('images/banner-welcome-images/movies_image.png') }}');
+                background-size: cover;
+                background-position: center top;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+
+            .hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg,
+                    rgba(229, 9, 20, 0.15) 0%,
+                    transparent 50%,
+                    rgba(26, 77, 143, 0.08) 100%
+                );
+                pointer-events: none;
+                z-index: 0;
+            }
+
+            .hero::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 200px;
+                background: linear-gradient(to bottom, transparent, #000000);
+                pointer-events: none;
+                z-index: 1;
             }
 
             .hero-content {
                 max-width: 900px;
                 margin: 0 auto;
                 position: relative;
-                z-index: 1;
+                z-index: 2;
             }
 
             .hero h1 {
@@ -551,7 +591,7 @@
                         <h3>Premium</h3>
                         <ul>
                             <li>Streaming illimité</li>
-                            <li>2 écrans simultanés</li>
+                            <li>1 écran simultané</li>
                             <li>Qualité HD & 4K</li>
                             <li>Accès complet à la bibliothèque</li>
                         </ul>
@@ -564,7 +604,7 @@
                         <h3>Supra Premium</h3>
                         <ul>
                             <li>Streaming illimité</li>
-                            <li>4 écrans simultanés</li>
+                            <li>2 écrans simultanés</li>
                             <li>Qualité 4K Ultra HD</li>
                             <li>Contenu exclusif premium</li>
                         </ul>
@@ -572,12 +612,12 @@
                     </div>
                     <div class="plan-card coming-soon">
                         <span class="badge coming-soon">À VENIR</span>
-                        <h3>Lite</h3>
+                        <h3>Ultra Premium</h3>
                         <ul>
-                            <li>Streaming limité</li>
-                            <li>1 écran simultané</li>
-                            <li>Qualité HD</li>
-                            <li>Accès basique</li>
+                            <li>Streaming illimité</li>
+                            <li>4 écrans simultanés</li>
+                            <li>Qualité 4K Ultra HD</li>
+                            <li>Contenu exclusif & prioritaire</li>
                         </ul>
                         <button class="btn btn-secondary" style="margin-top: 25px; width: 100%;" disabled>Bientôt disponible</button>
                     </div>
