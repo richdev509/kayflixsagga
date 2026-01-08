@@ -181,6 +181,50 @@
                 background-position: center top;
                 background-repeat: no-repeat;
                 background-attachment: fixed;
+                overflow: hidden;
+            }
+
+            .hero-glow-layer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+
+            .hero-glow-layer.active {
+                opacity: 1;
+            }
+
+            .hero-glow-spot {
+                position: absolute;
+                width: 600px;
+                height: 600px;
+                border-radius: 50%;
+                background: radial-gradient(circle,
+                    rgba(229, 9, 20, 0.4) 0%,
+                    rgba(26, 77, 143, 0.3) 40%,
+                    transparent 70%
+                );
+                transform: translate(-50%, -50%);
+                filter: blur(60px);
+                animation: glowPulseHero 4s ease-in-out infinite;
+                mix-blend-mode: screen;
+            }
+
+            /* Mobile: Wave animation automatique */
+            @media (max-width: 768px) {
+                .hero-glow-layer {
+                    opacity: 1;
+                }
+
+                .hero-glow-spot {
+                    animation: mobileWaveGlow 8s ease-in-out infinite;
+                }
             }
 
             .hero::before {
@@ -869,6 +913,65 @@
                         0 0 80px rgba(229, 9, 20, 0.5);
                 }
             }
+
+            @keyframes glowPulseHero {
+                0%, 100% {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 0.6;
+                }
+                50% {
+                    transform: translate(-50%, -50%) scale(1.2);
+                    opacity: 0.9;
+                }
+            }
+
+            @keyframes mobileWaveGlow {
+                0% {
+                    left: 20%;
+                    top: 30%;
+                    background: radial-gradient(circle,
+                        rgba(229, 9, 20, 0.5) 0%,
+                        rgba(26, 77, 143, 0.3) 40%,
+                        transparent 70%
+                    );
+                }
+                25% {
+                    left: 70%;
+                    top: 40%;
+                    background: radial-gradient(circle,
+                        rgba(26, 77, 143, 0.5) 0%,
+                        rgba(229, 9, 20, 0.3) 40%,
+                        transparent 70%
+                    );
+                }
+                50% {
+                    left: 80%;
+                    top: 70%;
+                    background: radial-gradient(circle,
+                        rgba(229, 9, 20, 0.5) 0%,
+                        rgba(26, 77, 143, 0.3) 40%,
+                        transparent 70%
+                    );
+                }
+                75% {
+                    left: 30%;
+                    top: 60%;
+                    background: radial-gradient(circle,
+                        rgba(26, 77, 143, 0.5) 0%,
+                        rgba(229, 9, 20, 0.3) 40%,
+                        transparent 70%
+                    );
+                }
+                100% {
+                    left: 20%;
+                    top: 30%;
+                    background: radial-gradient(circle,
+                        rgba(229, 9, 20, 0.5) 0%,
+                        rgba(26, 77, 143, 0.3) 40%,
+                        transparent 70%
+                    );
+                }
+            }
                     font-size: 28px;
                     width: 35px;
                     height: 35px;
@@ -998,7 +1101,10 @@
         </div>
 
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" id="heroSection">
+            <div class="hero-glow-layer" id="heroGlow">
+                <div class="hero-glow-spot" id="glowSpot"></div>
+            </div>
             <div class="hero-content">
                 <h1 class="fade-in-up">L'avenir du streaming est ici</h1>
                 <p class="fade-in-up delay-1">Explorez un univers de contenus premium en qualité exceptionnelle</p>
@@ -1148,6 +1254,50 @@
 
             // Initialize
             updateButtons();
+
+            // Hero Glow Interactive Effect
+            const heroSection = document.getElementById('heroSection');
+            const heroGlowLayer = document.getElementById('heroGlow');
+            const glowSpot = document.getElementById('glowSpot');
+            let isDesktop = window.innerWidth > 768;
+
+            // Desktop: Mouse tracking
+            if (isDesktop) {
+                heroSection.addEventListener('mouseenter', function() {
+                    heroGlowLayer.classList.add('active');
+                });
+
+                heroSection.addEventListener('mouseleave', function() {
+                    heroGlowLayer.classList.remove('active');
+                });
+
+                heroSection.addEventListener('mousemove', function(e) {
+                    const rect = heroSection.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    glowSpot.style.left = x + 'px';
+                    glowSpot.style.top = y + 'px';
+                });
+
+                // Scroll effect: change glow intensity
+                window.addEventListener('scroll', function() {
+                    const scrollY = window.scrollY;
+                    const heroHeight = heroSection.offsetHeight;
+                    const scrollPercent = Math.min(scrollY / heroHeight, 1);
+
+                    // Reduce opacity as user scrolls down
+                    heroGlowLayer.style.opacity = 1 - (scrollPercent * 0.5);
+                });
+            }
+
+            // Responsive check on resize
+            window.addEventListener('resize', function() {
+                isDesktop = window.innerWidth > 768;
+                if (!isDesktop) {
+                    heroGlowLayer.classList.remove('active');
+                }
+            });
 
             // Modal Functions
             function openModal() {
