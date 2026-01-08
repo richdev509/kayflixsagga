@@ -261,7 +261,8 @@
                 position: relative;
                 margin-top: 50px;
                 overflow: hidden;
-                padding: 0 50px;
+                padding: 0 60px;
+                width: 100%;
             }
 
             .features-grid {
@@ -269,11 +270,14 @@
                 gap: 40px;
                 transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 will-change: transform;
+                width: 100%;
             }
 
             .features-grid .feature-card {
                 min-width: calc(25% - 30px);
+                max-width: calc(25% - 30px);
                 flex-shrink: 0;
+                box-sizing: border-box;
             }
 
             .carousel-nav {
@@ -324,6 +328,8 @@
                 position: relative;
                 border: 1px solid rgba(229, 9, 20, 0.15);
                 backdrop-filter: blur(10px);
+                overflow: hidden;
+                word-wrap: break-word;
             }
 
             .feature-card::before {
@@ -376,6 +382,9 @@
                 color: #b8b8d1;
                 line-height: 1.8;
                 font-size: 16px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
             }
 
             .pricing-section {
@@ -519,16 +528,18 @@
             @media (max-width: 1200px) {
                 .features-grid .feature-card {
                     min-width: calc(33.333% - 27px);
+                    max-width: calc(33.333% - 27px);
                 }
             }
 
             @media (max-width: 900px) {
                 .features-grid .feature-card {
                     min-width: calc(50% - 20px);
+                    max-width: calc(50% - 20px);
                 }
 
                 .features-container {
-                    padding: 0 40px;
+                    padding: 0 50px;
                 }
             }
 
@@ -564,7 +575,8 @@
                 }
 
                 .features-grid .feature-card {
-                    min-width: calc(100% - 0px);
+                    min-width: 100%;
+                    max-width: 100%;
                 }
 
                 .features-container {
@@ -609,7 +621,7 @@
                 }
 
                 .features-container {
-                    padding: 0 45px;
+                    padding: 0 50px;
                 }
 
                 .carousel-nav {
