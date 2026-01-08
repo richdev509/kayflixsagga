@@ -972,6 +972,18 @@
                     );
                 }
             }
+
+            /* Modal Responsive */
+            @media (max-width: 768px) {
+                .modal-content {
+                    padding: 35px 25px;
+                    max-width: 85%;
+                    width: 85%;
+                }
+
+                .modal-close {
+                    top: 15px;
+                    right: 15px;
                     font-size: 28px;
                     width: 35px;
                     height: 35px;
