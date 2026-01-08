@@ -19,17 +19,18 @@
             }
 
             :root {
-                --primary: #00f0ff;
-                --secondary: #ff00ff;
-                --dark: #0a0a0f;
-                --card-bg: rgba(20, 20, 35, 0.8);
-                --glow-primary: rgba(0, 240, 255, 0.5);
-                --glow-secondary: rgba(255, 0, 255, 0.5);
+                --primary: #E50914;
+                --secondary: #dc030c;
+                --blue-accent: #1a4d8f;
+                --dark: #0a0a0a;
+                --card-bg: rgba(20, 20, 20, 0.85);
+                --glow-primary: rgba(229, 9, 20, 0.4);
+                --glow-secondary: rgba(220, 3, 12, 0.3);
             }
 
             body {
                 font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%);
+                background: linear-gradient(135deg, #000000 0%, #1a0a0a 50%, #000000 100%);
                 color: #ffffff;
                 line-height: 1.6;
                 overflow-x: hidden;
@@ -43,9 +44,9 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: 
-                    radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+                background:
+                    radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(26, 77, 143, 0.05) 0%, transparent 50%);
                 pointer-events: none;
                 z-index: 0;
             }
@@ -59,22 +60,36 @@
                 justify-content: space-between;
                 align-items: center;
                 z-index: 1000;
-                background: rgba(10, 10, 15, 0.85);
+                background: rgba(0, 0, 0, 0.9);
                 backdrop-filter: blur(20px);
-                border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+                border-bottom: 1px solid rgba(229, 9, 20, 0.2);
             }
 
             .logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+                position: relative;
+            }
+
+            .logo img {
+                height: 45px;
+                width: auto;
+                filter: drop-shadow(0 0 15px var(--glow-primary));
+                transition: transform 0.3s ease;
+            }
+
+            .logo:hover img {
+                transform: scale(1.05);
+            }
+
+            .logo-text {
                 font-size: 36px;
                 font-weight: 700;
-                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-decoration: none;
+                color: var(--primary);
                 letter-spacing: 2px;
-                position: relative;
-                text-shadow: 0 0 30px var(--glow-primary);
+                filter: drop-shadow(0 0 20px var(--glow-primary));
             }
 
             .nav-buttons {
@@ -97,8 +112,8 @@
             }
 
             .btn-primary {
-                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-                color: #0a0a0f;
+                background: var(--primary);
+                color: white;
                 box-shadow: 0 0 30px var(--glow-primary);
             }
 
@@ -123,19 +138,21 @@
             .btn-primary:hover {
                 transform: translateY(-3px);
                 box-shadow: 0 0 50px var(--glow-primary);
+                background: var(--secondary);
             }
 
             .btn-secondary {
                 background: transparent;
-                color: var(--primary);
-                border: 2px solid var(--primary);
-                box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+                color: #ffffff;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
             }
 
             .btn-secondary:hover {
-                background: var(--primary);
-                color: #0a0a0f;
-                box-shadow: 0 0 40px var(--glow-primary);
+                background: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+                border-color: var(--primary);
+                box-shadow: 0 0 30px var(--glow-primary);
                 transform: translateY(-3px);
             }
 
@@ -161,7 +178,7 @@
                 font-weight: 700;
                 margin-bottom: 30px;
                 line-height: 1.1;
-                background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%);
+                background: linear-gradient(135deg, #fff 0%, var(--primary) 70%, var(--secondary) 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
@@ -169,8 +186,8 @@
             }
 
             @keyframes glow {
-                0%, 100% { filter: drop-shadow(0 0 20px var(--glow-primary)); }
-                50% { filter: drop-shadow(0 0 40px var(--glow-secondary)); }
+                0%, 100% { filter: drop-shadow(0 0 15px var(--glow-primary)); }
+                50% { filter: drop-shadow(0 0 30px var(--glow-primary)); }
             }
 
             .hero p {
@@ -196,10 +213,8 @@
                 font-weight: 700;
                 text-align: center;
                 margin-bottom: 70px;
-                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                color: var(--primary);
+                filter: drop-shadow(0 0 20px var(--glow-primary));
             }
 
             .features-grid {
@@ -215,7 +230,7 @@
                 border-radius: 20px;
                 transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 position: relative;
-                border: 1px solid rgba(0, 240, 255, 0.1);
+                border: 1px solid rgba(229, 9, 20, 0.15);
                 backdrop-filter: blur(10px);
             }
 
@@ -252,13 +267,17 @@
                 filter: drop-shadow(0 0 10px var(--primary));
             }
 
+            .feature-icon img {
+                width: 70px;
+                height: 70px;
+                object-fit: contain;
+                filter: drop-shadow(0 0 10px var(--glow-primary));
+            }
+
             .feature-card h3 {
                 font-size: 26px;
                 margin-bottom: 18px;
-                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                color: var(--primary);
             }
 
             .feature-card p {
@@ -268,7 +287,7 @@
             }
 
             .pricing-section {
-                background: rgba(10, 10, 30, 0.5);
+                background: rgba(0, 0, 0, 0.6);
                 backdrop-filter: blur(20px);
             }
 
@@ -323,19 +342,38 @@
                 box-shadow: 0 25px 70px var(--glow-secondary);
             }
 
+            .plan-card.coming-soon {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+
+            .plan-card.coming-soon h3 {
+                color: #888;
+            }
+
+            .plan-card.coming-soon li::before {
+                color: #666;
+            }
+
             .badge {
                 position: absolute;
                 top: -18px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: linear-gradient(135deg, var(--primary), var(--secondary));
-                color: #0a0a0f;
+                background: var(--primary);
+                color: white;
                 padding: 8px 25px;
                 border-radius: 30px;
                 font-size: 13px;
                 font-weight: 700;
                 letter-spacing: 1px;
                 box-shadow: 0 0 30px var(--glow-primary);
+            }
+
+            .badge.coming-soon {
+                background: rgba(100, 100, 100, 0.8);
+                color: #ddd;
+                box-shadow: 0 0 20px rgba(100, 100, 100, 0.3);
             }
 
             .plan-card h3 {
@@ -352,7 +390,7 @@
 
             .plan-card li {
                 padding: 15px 0;
-                border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+                border-bottom: 1px solid rgba(229, 9, 20, 0.15);
                 color: #b8b8d1;
                 font-size: 15px;
                 display: flex;
@@ -372,11 +410,11 @@
             }
 
             footer {
-                background: rgba(10, 10, 15, 0.95);
+                background: rgba(0, 0, 0, 0.95);
                 padding: 50px 20px;
                 text-align: center;
                 color: #b8b8d1;
-                border-top: 1px solid rgba(0, 240, 255, 0.1);
+                border-top: 1px solid rgba(229, 9, 20, 0.2);
                 position: relative;
                 z-index: 1;
             }
@@ -442,7 +480,9 @@
     <body>
         <!-- Navigation -->
         <nav class="navbar">
-            <a href="/" class="logo">KAYFLIX</a>
+            <a href="/" class="logo">
+                <img src="{{ asset('images/logo.png') }}" alt="Kayflix Logo">
+            </a>
             <div class="nav-buttons">
                 @if (Route::has('login'))
                     @auth
@@ -474,7 +514,9 @@
                 <h2 class="section-title">Expérience de streaming ultime</h2>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">∞</div>
+                        <div class="feature-icon">
+                            <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                        </div>
                         <h3>Contenu Illimité</h3>
                         <p>Accédez à une bibliothèque infinie de films et séries en streaming haute qualité, disponibles 24/7.</p>
                     </div>
@@ -484,7 +526,9 @@
                         <p>Regardez sur TV, ordinateur, tablette ou smartphone avec synchronisation instantanée entre tous vos appareils.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">◈</div>
+                        <div class="feature-icon">
+                            <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                        </div>
                         <h3>Qualité 4K Ultra HD</h3>
                         <p>Profitez d'une qualité d'image exceptionnelle avec nos contenus disponibles en HD, 4K et HDR.</p>
                     </div>
@@ -502,42 +546,40 @@
             <div class="container">
                 <h2 class="section-title">Choisissez votre formule</h2>
                 <div class="plans-grid">
-                    <div class="plan-card">
-                        <h3>Basique</h3>
-                        <ul>
-                            <li>Streaming illimité</li>
-                            <li>1 écran simultané</li>
-                            <li>Qualité HD</li>
-                            <li>1 profil utilisateur</li>
-                        </ul>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-secondary" style="margin-top: 25px; width: 100%;">Choisir</a>
-                        @endif
-                    </div>
                     <div class="plan-card featured">
-                        <span class="badge">POPULAIRE</span>
+                        <span class="badge">DISPONIBLE</span>
                         <h3>Premium</h3>
                         <ul>
                             <li>Streaming illimité</li>
                             <li>2 écrans simultanés</li>
                             <li>Qualité HD & 4K</li>
-                            <li>3 profils utilisateurs</li>
+                            <li>Accès complet à la bibliothèque</li>
                         </ul>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Choisir</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Commencer</a>
                         @endif
                     </div>
-                    <div class="plan-card">
-                        <h3>VIP</h3>
+                    <div class="plan-card coming-soon">
+                        <span class="badge coming-soon">À VENIR</span>
+                        <h3>Supra Premium</h3>
                         <ul>
                             <li>Streaming illimité</li>
                             <li>4 écrans simultanés</li>
                             <li>Qualité 4K Ultra HD</li>
-                            <li>5 profils utilisateurs</li>
+                            <li>Contenu exclusif premium</li>
                         </ul>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-secondary" style="margin-top: 25px; width: 100%;">Choisir</a>
-                        @endif
+                        <button class="btn btn-secondary" style="margin-top: 25px; width: 100%;" disabled>Bientôt disponible</button>
+                    </div>
+                    <div class="plan-card coming-soon">
+                        <span class="badge coming-soon">À VENIR</span>
+                        <h3>Lite</h3>
+                        <ul>
+                            <li>Streaming limité</li>
+                            <li>1 écran simultané</li>
+                            <li>Qualité HD</li>
+                            <li>Accès basique</li>
+                        </ul>
+                        <button class="btn btn-secondary" style="margin-top: 25px; width: 100%;" disabled>Bientôt disponible</button>
                     </div>
                 </div>
             </div>
