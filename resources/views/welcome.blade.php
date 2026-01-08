@@ -114,7 +114,10 @@
             .btn-primary {
                 background: var(--primary);
                 color: white;
-                box-shadow: 0 0 30px var(--glow-primary);
+                box-shadow:
+                    0 0 30px rgba(229, 9, 20, 0.4),
+                    0 0 40px rgba(26, 77, 143, 0.3);
+                animation: buttonGlow 3s ease-in-out infinite;
             }
 
             .btn-primary::before {
@@ -137,7 +140,9 @@
 
             .btn-primary:hover {
                 transform: translateY(-3px);
-                box-shadow: 0 0 50px var(--glow-primary);
+                box-shadow:
+                    0 0 50px rgba(229, 9, 20, 0.6),
+                    0 0 60px rgba(26, 77, 143, 0.4);
                 background: var(--secondary);
             }
 
@@ -326,27 +331,34 @@
                 border-radius: 20px;
                 transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 position: relative;
-                border: 1px solid rgba(229, 9, 20, 0.15);
+                border: 2px solid transparent;
+                background-clip: padding-box;
                 backdrop-filter: blur(10px);
                 overflow: hidden;
                 word-wrap: break-word;
+                box-shadow:
+                    0 10px 40px rgba(229, 9, 20, 0.2),
+                    0 10px 50px rgba(26, 77, 143, 0.15);
             }
 
             .feature-card::before {
                 content: '';
                 position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
                 border-radius: 20px;
-                padding: 2px;
-                background: linear-gradient(135deg, var(--primary), var(--secondary));
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                opacity: 0;
-                transition: opacity 0.5s;
+                background: linear-gradient(45deg,
+                    var(--primary) 0%,
+                    var(--blue-accent) 25%,
+                    var(--primary) 50%,
+                    var(--blue-accent) 75%,
+                    var(--primary) 100%);
+                background-size: 300% 300%;
+                z-index: -1;
+                animation: gradientRotate 6s linear infinite;
+                opacity: 0.6;
             }
 
             .feature-card:hover::before {
@@ -355,7 +367,9 @@
 
             .feature-card:hover {
                 transform: translateY(-10px) scale(1.02);
-                box-shadow: 0 20px 60px var(--glow-primary);
+                box-shadow:
+                    0 20px 60px rgba(229, 9, 20, 0.4),
+                    0 20px 70px rgba(26, 77, 143, 0.3);
             }
 
             .feature-icon {
@@ -430,11 +444,31 @@
 
             .plan-card.featured {
                 transform: scale(1.05);
-                border-color: var(--primary);
-                box-shadow: 0 0 60px var(--glow-primary);
+                border: 2px solid transparent;
+                background-clip: padding-box;
+                box-shadow:
+                    0 0 60px rgba(229, 9, 20, 0.5),
+                    0 0 70px rgba(26, 77, 143, 0.4);
+                animation: featureCardGlow 4s ease-in-out infinite;
             }
 
             .plan-card.featured::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                border-radius: 25px;
+                background: linear-gradient(45deg,
+                    var(--primary) 0%,
+                    var(--blue-accent) 25%,
+                    var(--primary) 50%,
+                    var(--blue-accent) 75%,
+                    var(--primary) 100%);
+                background-size: 300% 300%;
+                z-index: -1;
+                animation: gradientRotate 6s linear infinite;
                 opacity: 1;
             }
 
@@ -810,17 +844,31 @@
                 }
             }
 
-            /* Modal Responsive */
-            @media (max-width: 768px) {
-                .modal-content {
-                    padding: 35px 25px;
-                    max-width: 85%;
-                    width: 85%;
+            @keyframes buttonGlow {
+                0%, 100% {
+                    box-shadow:
+                        0 0 30px rgba(229, 9, 20, 0.4),
+                        0 0 40px rgba(26, 77, 143, 0.3);
                 }
+                50% {
+                    box-shadow:
+                        0 0 40px rgba(26, 77, 143, 0.5),
+                        0 0 50px rgba(229, 9, 20, 0.4);
+                }
+            }
 
-                .modal-close {
-                    top: 15px;
-                    right: 15px;
+            @keyframes featureCardGlow {
+                0%, 100% {
+                    box-shadow:
+                        0 0 60px rgba(229, 9, 20, 0.5),
+                        0 0 70px rgba(26, 77, 143, 0.4);
+                }
+                50% {
+                    box-shadow:
+                        0 0 70px rgba(26, 77, 143, 0.6),
+                        0 0 80px rgba(229, 9, 20, 0.5);
+                }
+            }
                     font-size: 28px;
                     width: 35px;
                     height: 35px;
