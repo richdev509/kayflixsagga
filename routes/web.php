@@ -23,10 +23,10 @@ Route::get('/payment/cancel', function () {
     return view('payment.cancel');
 });
 
-// Authentication Routes (Register disabled, custom login path)
-Auth::routes(['register' => false]);
+// Authentication Routes (Register and default login disabled)
+Auth::routes(['register' => false, 'login' => false]);
 
-// Custom login route
+// Custom login route (obscured path for security)
 Route::get('/boxmelog', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/boxmelog', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 
