@@ -159,4 +159,42 @@ class PaymentController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Cancel a pending registration session
+     */
+    public function cancelSession(Request $request)
+    {
+        $request->validate([
+            'session_id' => 'required|string',
+        ]);
+
+        try {
+            $pendingReg = PendingRegistration::where('stripe_session_id', $request->session_id)
+                ->where('status', 'pending')
+                ->first();
+
+            if ($pendingReg) {
+                $pendingReg->update([
+                    'status' => 'cancelled',
+                    'completed_at' => now(),
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Session annulée avec succès',
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Session non trouvée ou déjà traitée',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur lors de l\'annulation',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

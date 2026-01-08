@@ -23,6 +23,7 @@ Route::get('/subscription-plans', [SubscriptionController::class, 'plans']);
 // Payment routes (public for registration)
 Route::post('/payment/create-checkout-session', [PaymentController::class, 'createCheckoutSession']);
 Route::post('/payment/verify-session', [PaymentController::class, 'verifySession']);
+Route::post('/payment/cancel-session', [PaymentController::class, 'cancelSession']);
 
 // Stripe webhook (must be outside auth middleware)
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);

@@ -78,12 +78,12 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                     // Ex: "laravel-database-laravel-cache-view_final:7" -> "view_final:7"
                     preg_match('/(view_(?:progress|final):\d+)$/', $fullKey, $matches);
                     $key = $matches[1] ?? null;
-                    
+
                     if (!$key) {
                         Log::warning("Impossible d'extraire la clé de: {$fullKey}");
                         continue;
                     }
-                    
+
                     $data = cache()->get($key);
 
                     if (!$data || !isset($data['session_id'])) {
@@ -109,7 +109,7 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                     // Supprimer la clé Redis après traitement
                     cache()->forget($key);
                     $processed++;
-                    
+
                     Log::info("Session {$data['session_id']} traitée avec succès");
                 }
 
@@ -136,10 +136,10 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
         try {
             $redis = Cache::getRedis();
             $keys = [];
-            
+
             // Predis supporte keys() via __call(), pas besoin de method_exists
             $allKeys = $redis->keys('*' . $pattern . '*');
-            
+
             // Filtrer pour garder uniquement celles qui correspondent au pattern exact
             foreach ($allKeys as $key) {
                 // Vérifier que c'est bien view_progress:X ou view_final:X

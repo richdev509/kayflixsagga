@@ -67,6 +67,14 @@ class StripeWebhookController extends Controller
                 $this->handleInvoicePaymentFailed($event->data->object);
                 break;
 
+            case 'checkout.session.expired':
+                $this->handleCheckoutSessionExpired($event->data->object);
+                break;
+
+            case 'checkout.session.async_payment_failed':
+                $this->handleCheckoutSessionFailed($event->data->object);
+                break;
+
             default:
                 Log::info('Unhandled webhook event type: ' . $event->type);
         }
@@ -274,6 +282,57 @@ class StripeWebhookController extends Controller
         if ($subscription) {
             $subscription->update([
                 'status' => 'payment_failed',
+            ]);
+
+            // Notifier l'utilisateur par email (optionnel)
+            // Mail::to($subscription->user->email)->send(new PaymentFailedMail($subscription));
+        }
+    }
+
+    /**
+     * Handle checkout.session.expired event
+     * Session Stripe expire après 24h sans paiement
+     */
+    private function handleCheckoutSessionExpired($session)
+    {
+        Log::info('Checkout session expired', ['session_id' => $session->id]);
+
+        // Marquer la registration comme failed
+        $pendingReg = PendingRegistration::where('stripe_session_id', $session->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($pendingReg) {
+            $pendingReg->update([
+                'status' => 'expired',
+            ]);
+
+            Log::info('Pending registration marked as expired', [
+                'email' => $pendingReg->email,
+                'session_id' => $session->id
+            ]);
+        }
+    }
+
+    /**
+     * Handle checkout.session.async_payment_failed event
+     */
+    private function handleCheckoutSessionFailed($session)
+    {
+        Log::error('Checkout session payment failed', ['session_id' => $session->id]);
+
+        $pendingReg = PendingRegistration::where('stripe_session_id', $session->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($pendingReg) {
+            $pendingReg->update([
+                'status' => 'failed',
+            ]);
+
+            Log::info('Pending registration marked as failed', [
+                'email' => $pendingReg->email,
+                'session_id' => $session->id
             ]);
         }
     }
