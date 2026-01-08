@@ -23,8 +23,12 @@ Route::get('/payment/cancel', function () {
     return view('payment.cancel');
 });
 
-// Authentication Routes
-Auth::routes();
+// Authentication Routes (Register disabled, custom login path)
+Auth::routes(['register' => false]);
+
+// Custom login route
+Route::get('/boxmelog', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/boxmelog', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 
 // Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
@@ -91,7 +95,5 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('subscription-plans', SubscriptionPlanController::class);
     Route::patch('/subscription-plans/{subscriptionPlan}/toggle', [SubscriptionPlanController::class, 'toggle'])->name('subscription-plans.toggle');
 });
-
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
