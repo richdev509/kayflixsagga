@@ -257,11 +257,63 @@
                 filter: drop-shadow(0 0 20px var(--glow-primary));
             }
 
-            .features-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                gap: 40px;
+            .features-container {
+                position: relative;
                 margin-top: 50px;
+                overflow: hidden;
+                padding: 0 50px;
+            }
+
+            .features-grid {
+                display: flex;
+                gap: 40px;
+                transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                will-change: transform;
+            }
+
+            .features-grid .feature-card {
+                min-width: calc(25% - 30px);
+                flex-shrink: 0;
+            }
+
+            .carousel-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(229, 9, 20, 0.9);
+                color: white;
+                border: none;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                font-size: 24px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                z-index: 10;
+                box-shadow: 0 0 20px var(--glow-primary);
+            }
+
+            .carousel-nav:hover {
+                background: var(--secondary);
+                transform: translateY(-50%) scale(1.1);
+                box-shadow: 0 0 30px var(--glow-primary);
+            }
+
+            .carousel-nav.prev {
+                left: 0;
+            }
+
+            .carousel-nav.next {
+                right: 0;
+            }
+
+            .carousel-nav:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+                background: rgba(100, 100, 100, 0.5);
             }
 
             .feature-card {
@@ -464,6 +516,22 @@
                 font-size: 15px;
             }
 
+            @media (max-width: 1200px) {
+                .features-grid .feature-card {
+                    min-width: calc(33.333% - 27px);
+                }
+            }
+
+            @media (max-width: 900px) {
+                .features-grid .feature-card {
+                    min-width: calc(50% - 20px);
+                }
+
+                .features-container {
+                    padding: 0 40px;
+                }
+            }
+
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 42px;
@@ -474,24 +542,80 @@
                 }
 
                 .navbar {
-                    padding: 20px 25px;
+                    padding: 15px 20px;
+                    flex-wrap: wrap;
                 }
 
-                .logo {
-                    font-size: 28px;
+                .logo img {
+                    height: 35px;
+                }
+
+                .nav-buttons {
+                    gap: 10px;
+                }
+
+                .nav-buttons .btn {
+                    padding: 10px 20px;
+                    font-size: 14px;
                 }
 
                 .section-title {
                     font-size: 36px;
                 }
 
-                .features-grid,
+                .features-grid .feature-card {
+                    min-width: calc(100% - 0px);
+                }
+
+                .features-container {
+                    padding: 0 50px;
+                }
+
+                .carousel-nav {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 20px;
+                }
+
                 .plans-grid {
                     grid-template-columns: 1fr;
                 }
 
                 .plan-card.featured {
                     transform: scale(1);
+                }
+            }
+
+            @media (max-width: 480px) {
+                .navbar {
+                    padding: 12px 15px;
+                }
+
+                .logo img {
+                    height: 30px;
+                }
+
+                .nav-buttons .btn {
+                    padding: 8px 16px;
+                    font-size: 13px;
+                }
+
+                .hero h1 {
+                    font-size: 32px;
+                }
+
+                .hero p {
+                    font-size: 16px;
+                }
+
+                .features-container {
+                    padding: 0 45px;
+                }
+
+                .carousel-nav {
+                    width: 35px;
+                    height: 35px;
+                    font-size: 18px;
                 }
             }
 
@@ -530,7 +654,7 @@
                     @else
                         <a href="{{ route('login') }}" class="btn btn-secondary">Connexion</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary">S'inscrire</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary">Rejoindre</a>
                         @endif
                     @endauth
                 @endif
@@ -552,31 +676,35 @@
         <section class="section">
             <div class="container">
                 <h2 class="section-title">Expérience de streaming ultime</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                <div class="features-container">
+                    <button class="carousel-nav prev" onclick="slideFeatures(-1)" id="prevBtn">‹</button>
+                    <div class="features-grid" id="featuresGrid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                            </div>
+                            <h3>Contenu Illimité</h3>
+                            <p>Accédez à une bibliothèque infinie de films et séries en streaming haute qualité, disponibles 24/7.</p>
                         </div>
-                        <h3>Contenu Illimité</h3>
-                        <p>Accédez à une bibliothèque infinie de films et séries en streaming haute qualité, disponibles 24/7.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Multi-appareils</h3>
-                        <p>Regardez sur TV, ordinateur, tablette ou smartphone avec synchronisation instantanée entre tous vos appareils.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>Multi-appareils</h3>
+                            <p>Regardez sur TV, ordinateur, tablette ou smartphone avec synchronisation instantanée entre tous vos appareils.</p>
                         </div>
-                        <h3>Qualité 4K Ultra HD</h3>
-                        <p>Profitez d'une qualité d'image exceptionnelle avec nos contenus disponibles en HD, 4K et HDR.</p>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <img src="{{ asset('images/logo-icon.png') }}" alt="Kayflix Icon">
+                            </div>
+                            <h3>Qualité 4K Ultra HD</h3>
+                            <p>Profitez d'une qualité d'image exceptionnelle avec nos contenus disponibles en HD, 4K et HDR.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⟳</div>
+                            <h3>Sans Engagement</h3>
+                            <p>Annulez ou modifiez votre abonnement à tout moment, sans frais ni contrainte de durée.</p>
+                        </div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⟳</div>
-                        <h3>Sans Engagement</h3>
-                        <p>Annulez ou modifiez votre abonnement à tout moment, sans frais ni contrainte de durée.</p>
-                    </div>
+                    <button class="carousel-nav next" onclick="slideFeatures(1)" id="nextBtn">›</button>
                 </div>
             </div>
         </section>
@@ -633,5 +761,61 @@
                 <p>La nouvelle ère du streaming premium</p>
             </div>
         </footer>
+
+        <script>
+            let currentSlide = 0;
+            const featuresGrid = document.getElementById('featuresGrid');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            function getCardsPerView() {
+                const width = window.innerWidth;
+                if (width <= 768) return 1;
+                if (width <= 900) return 2;
+                if (width <= 1200) return 3;
+                return 4;
+            }
+
+            function getTotalSlides() {
+                const cardsPerView = getCardsPerView();
+                const totalCards = featuresGrid.children.length;
+                return Math.max(0, totalCards - cardsPerView);
+            }
+
+            function updateButtons() {
+                const totalSlides = getTotalSlides();
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide >= totalSlides;
+            }
+
+            function slideFeatures(direction) {
+                const totalSlides = getTotalSlides();
+                currentSlide += direction;
+
+                if (currentSlide < 0) currentSlide = 0;
+                if (currentSlide > totalSlides) currentSlide = totalSlides;
+
+                const cardWidth = featuresGrid.children[0].offsetWidth;
+                const gap = 40;
+                const offset = -(currentSlide * (cardWidth + gap));
+
+                featuresGrid.style.transform = `translateX(${offset}px)`;
+                updateButtons();
+            }
+
+            // Reset carousel on window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    currentSlide = 0;
+                    featuresGrid.style.transform = 'translateX(0)';
+                    updateButtons();
+                }, 250);
+            });
+
+            // Initialize
+            updateButtons();
+        </script>
     </body>
 </html>
