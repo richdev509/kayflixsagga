@@ -727,6 +727,102 @@
                 }
             }
 
+            /* Modal Responsive */
+            @media (max-width: 768px) {
+                .modal-content {
+                    padding: 35px 25px;
+                    max-width: 85%;
+                    width: 85%;
+                }
+
+                .modal-close {
+                    top: 15px;
+                    right: 15px;
+                    font-size: 28px;
+                    width: 35px;
+                    height: 35px;
+                }
+
+                .modal-image {
+                    max-width: 250px;
+                    margin-bottom: 25px;
+                }
+
+                .modal-title {
+                    font-size: 26px;
+                    margin-bottom: 15px;
+                }
+
+                .modal-message {
+                    font-size: 16px;
+                    line-height: 1.5;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .modal-content {
+                    padding: 30px 20px;
+                    max-width: 92%;
+                    width: 92%;
+                    border-radius: 20px;
+                }
+
+                .modal-close {
+                    top: 12px;
+                    right: 12px;
+                    font-size: 26px;
+                    width: 32px;
+                    height: 32px;
+                }
+
+                .modal-image {
+                    max-width: 200px;
+                    margin-bottom: 20px;
+                    border-radius: 12px;
+                }
+
+                .modal-title {
+                    font-size: 22px;
+                    margin-bottom: 12px;
+                }
+
+                .modal-message {
+                    font-size: 15px;
+                    line-height: 1.5;
+                }
+
+                .nav-buttons .btn {
+                    padding: 10px 18px;
+                    font-size: 14px;
+                    white-space: nowrap;
+                }
+            }
+
+            @media (max-width: 360px) {
+                .modal-content {
+                    padding: 25px 15px;
+                    max-width: 95%;
+                    width: 95%;
+                }
+
+                .modal-image {
+                    max-width: 180px;
+                }
+
+                .modal-title {
+                    font-size: 20px;
+                }
+
+                .modal-message {
+                    font-size: 14px;
+                }
+
+                .nav-buttons .btn {
+                    padding: 8px 14px;
+                    font-size: 12px;
+                }
+            }
+
             /* Animations d'entrée */
             @keyframes fadeInUp {
                 from {
