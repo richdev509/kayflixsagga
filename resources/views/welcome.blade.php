@@ -661,7 +661,7 @@
                 position: relative;
                 border: 2px solid transparent;
                 background-clip: padding-box;
-                box-shadow: 
+                box-shadow:
                     0 0 60px rgba(229, 9, 20, 0.4),
                     0 0 80px rgba(26, 77, 143, 0.3);
                 animation: slideUp 0.4s ease-out, borderGlow 4s ease-in-out infinite;
@@ -674,11 +674,11 @@
                 left: -2px;
                 right: -2px;
                 bottom: -2px;
-                background: linear-gradient(45deg, 
-                    var(--primary) 0%, 
-                    var(--blue-accent) 25%, 
-                    var(--primary) 50%, 
-                    var(--blue-accent) 75%, 
+                background: linear-gradient(45deg,
+                    var(--primary) 0%,
+                    var(--blue-accent) 25%,
+                    var(--primary) 50%,
+                    var(--blue-accent) 75%,
                     var(--primary) 100%);
                 background-size: 300% 300%;
                 border-radius: 25px;
@@ -716,7 +716,7 @@
                 height: auto;
                 margin: 0 auto 30px;
                 border-radius: 15px;
-                box-shadow: 
+                box-shadow:
                     0 10px 40px rgba(229, 9, 20, 0.4),
                     0 10px 60px rgba(26, 77, 143, 0.3);
                 position: relative;
@@ -781,12 +781,12 @@
 
             @keyframes glowPulse {
                 0%, 100% {
-                    box-shadow: 
+                    box-shadow:
                         0 10px 40px rgba(229, 9, 20, 0.4),
                         0 10px 60px rgba(26, 77, 143, 0.3);
                 }
                 50% {
-                    box-shadow: 
+                    box-shadow:
                         0 10px 60px rgba(26, 77, 143, 0.5),
                         0 10px 80px rgba(229, 9, 20, 0.4);
                 }
@@ -799,12 +799,12 @@
 
             @keyframes borderGlow {
                 0%, 100% {
-                    box-shadow: 
+                    box-shadow:
                         0 0 60px rgba(229, 9, 20, 0.4),
                         0 0 80px rgba(26, 77, 143, 0.3);
                 }
                 50% {
-                    box-shadow: 
+                    box-shadow:
                         0 0 80px rgba(26, 77, 143, 0.5),
                         0 0 100px rgba(229, 9, 20, 0.4);
                 }
