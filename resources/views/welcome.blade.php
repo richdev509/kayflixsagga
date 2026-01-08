@@ -4,7 +4,42 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Kayflix - La révolution du streaming</title>
+        <title>Kayflix - La révolution du streaming haïtien</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/logo-icon.png') }}">
+
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="Kayflix - La plateforme de streaming premium haïtienne. Découvrez des contenus exclusifs en qualité 4K, disponibles 24/7. Une révolution du divertissement numérique depuis Haïti pour le monde.">
+        <meta name="keywords" content="streaming, Haïti, Kayflix, films, séries, 4K, contenus haïtiens, divertissement, plateforme streaming">
+        <meta name="author" content="Sagacetech">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url('/') }}">
+        <meta property="og:title" content="Kayflix - La révolution du streaming haïtien">
+        <meta property="og:description" content="Découvrez Kayflix, la plateforme de streaming premium née en Haïti. Contenus exclusifs en qualité exceptionnelle, accessible partout dans le monde. Rejoignez la révolution du divertissement haïtien!">
+        <meta property="og:image" content="{{ asset('images/banner-welcome-images/movies_image.png') }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:locale" content="fr_HT">
+        <meta property="og:site_name" content="Kayflix">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="{{ url('/') }}">
+        <meta name="twitter:title" content="Kayflix - La révolution du streaming haïtien">
+        <meta name="twitter:description" content="Plateforme de streaming premium haïtienne. Contenus exclusifs en 4K, disponibles 24/7. Une innovation d'Haïti pour le monde.">
+        <meta name="twitter:image" content="{{ asset('images/banner-welcome-images/movies_image.png') }}">
+
+        <!-- WhatsApp / Telegram -->
+        <meta property="og:image:alt" content="Kayflix - Streaming Premium Haïtien">
+
+        <!-- Theme Color -->
+        <meta name="theme-color" content="#E50914">
+        <meta name="msapplication-navbutton-color" content="#E50914">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
