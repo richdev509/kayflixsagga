@@ -631,6 +631,102 @@
                 }
             }
 
+            /* Modal Popup */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.92);
+                z-index: 9999;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(10px);
+                animation: fadeIn 0.3s ease-out;
+            }
+
+            .modal-overlay.active {
+                display: flex;
+            }
+
+            .modal-content {
+                background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+                border-radius: 25px;
+                padding: 50px;
+                max-width: 500px;
+                width: 90%;
+                text-align: center;
+                position: relative;
+                border: 2px solid rgba(229, 9, 20, 0.3);
+                box-shadow: 0 0 60px var(--glow-primary);
+                animation: slideUp 0.4s ease-out;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: transparent;
+                border: none;
+                color: #ffffff;
+                font-size: 32px;
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                border-radius: 50%;
+            }
+
+            .modal-close:hover {
+                background: rgba(229, 9, 20, 0.2);
+                color: var(--primary);
+                transform: rotate(90deg);
+            }
+
+            .modal-image {
+                width: 100%;
+                max-width: 300px;
+                height: auto;
+                margin: 0 auto 30px;
+                border-radius: 15px;
+                box-shadow: 0 10px 40px rgba(229, 9, 20, 0.3);
+            }
+
+            .modal-title {
+                font-size: 32px;
+                font-weight: 700;
+                color: var(--primary);
+                margin-bottom: 20px;
+                filter: drop-shadow(0 0 20px var(--glow-primary));
+            }
+
+            .modal-message {
+                font-size: 18px;
+                color: #b8b8d1;
+                line-height: 1.6;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             /* Animations d'entrée */
             @keyframes fadeInUp {
                 from {
@@ -660,18 +756,19 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Kayflix Logo">
             </a>
             <div class="nav-buttons">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-secondary">Connexion</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary">Rejoindre</a>
-                        @endif
-                    @endauth
-                @endif
+                <button onclick="openModal()" class="btn btn-primary">Télécharger Application</button>
             </div>
         </nav>
+
+        <!-- Modal Popup -->
+        <div class="modal-overlay" id="appModal" onclick="closeModalOnOverlay(event)">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <img src="{{ asset('images/app-mobile-screenshot.png') }}" alt="Application Mobile Kayflix" class="modal-image">
+                <h2 class="modal-title">Application Bientôt Disponible</h2>
+                <p class="modal-message">Notre application mobile est en cours de développement. Restez connectés pour être les premiers informés de son lancement !</p>
+            </div>
+        </div>
 
         <!-- Hero Section -->
         <section class="hero">
@@ -828,6 +925,30 @@
 
             // Initialize
             updateButtons();
+
+            // Modal Functions
+            function openModal() {
+                document.getElementById('appModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                document.getElementById('appModal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            function closeModalOnOverlay(event) {
+                if (event.target.id === 'appModal') {
+                    closeModal();
+                }
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
         </script>
     </body>
 </html>
