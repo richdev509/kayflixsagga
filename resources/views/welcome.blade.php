@@ -659,9 +659,31 @@
                 width: 90%;
                 text-align: center;
                 position: relative;
-                border: 2px solid rgba(229, 9, 20, 0.3);
-                box-shadow: 0 0 60px var(--glow-primary);
-                animation: slideUp 0.4s ease-out;
+                border: 2px solid transparent;
+                background-clip: padding-box;
+                box-shadow: 
+                    0 0 60px rgba(229, 9, 20, 0.4),
+                    0 0 80px rgba(26, 77, 143, 0.3);
+                animation: slideUp 0.4s ease-out, borderGlow 4s ease-in-out infinite;
+            }
+
+            .modal-content::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: linear-gradient(45deg, 
+                    var(--primary) 0%, 
+                    var(--blue-accent) 25%, 
+                    var(--primary) 50%, 
+                    var(--blue-accent) 75%, 
+                    var(--primary) 100%);
+                background-size: 300% 300%;
+                border-radius: 25px;
+                z-index: -1;
+                animation: gradientRotate 6s linear infinite;
             }
 
             .modal-close {
@@ -694,7 +716,31 @@
                 height: auto;
                 margin: 0 auto 30px;
                 border-radius: 15px;
-                box-shadow: 0 10px 40px rgba(229, 9, 20, 0.3);
+                box-shadow: 
+                    0 10px 40px rgba(229, 9, 20, 0.4),
+                    0 10px 60px rgba(26, 77, 143, 0.3);
+                position: relative;
+                animation: glowPulse 3s ease-in-out infinite;
+            }
+
+            .modal-image::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    rgba(26, 77, 143, 0.1) 45%,
+                    rgba(229, 9, 20, 0.2) 50%,
+                    rgba(26, 77, 143, 0.1) 55%,
+                    transparent 100%
+                );
+                transform: rotate(45deg);
+                animation: shimmer 4s linear infinite;
+                pointer-events: none;
             }
 
             .modal-title {
@@ -724,6 +770,43 @@
                 to {
                     opacity: 1;
                     transform: translateY(0);
+                }
+            }
+
+            @keyframes gradientRotate {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            @keyframes glowPulse {
+                0%, 100% {
+                    box-shadow: 
+                        0 10px 40px rgba(229, 9, 20, 0.4),
+                        0 10px 60px rgba(26, 77, 143, 0.3);
+                }
+                50% {
+                    box-shadow: 
+                        0 10px 60px rgba(26, 77, 143, 0.5),
+                        0 10px 80px rgba(229, 9, 20, 0.4);
+                }
+            }
+
+            @keyframes shimmer {
+                0% { transform: translateX(-100%) rotate(45deg); }
+                100% { transform: translateX(100%) rotate(45deg); }
+            }
+
+            @keyframes borderGlow {
+                0%, 100% {
+                    box-shadow: 
+                        0 0 60px rgba(229, 9, 20, 0.4),
+                        0 0 80px rgba(26, 77, 143, 0.3);
+                }
+                50% {
+                    box-shadow: 
+                        0 0 80px rgba(26, 77, 143, 0.5),
+                        0 0 100px rgba(229, 9, 20, 0.4);
                 }
             }
 
@@ -871,9 +954,7 @@
             <div class="hero-content">
                 <h1 class="fade-in-up">L'avenir du streaming est ici</h1>
                 <p class="fade-in-up delay-1">Explorez un univers de contenus premium en qualité exceptionnelle</p>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="btn btn-primary fade-in-up delay-2" style="font-size: 22px; padding: 18px 45px;">Découvrir maintenant</a>
-                @endif
+                <button onclick="openModal()" class="btn btn-primary fade-in-up delay-2" style="font-size: 22px; padding: 18px 45px;">Découvrir maintenant</button>
             </div>
         </section>
 
@@ -928,9 +1009,7 @@
                             <li>Qualité HD & 4K</li>
                             <li>Accès complet à la bibliothèque</li>
                         </ul>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Commencer</a>
-                        @endif
+                        <button onclick="openModal()" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Commencer</button>
                     </div>
                     <div class="plan-card coming-soon">
                         <span class="badge coming-soon">À VENIR</span>
