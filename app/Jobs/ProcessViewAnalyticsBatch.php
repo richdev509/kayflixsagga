@@ -8,6 +8,7 @@ use App\Models\ViewAnalytic;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class ProcessViewAnalyticsBatch implements ShouldQueue
 {
