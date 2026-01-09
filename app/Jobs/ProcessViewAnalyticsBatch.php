@@ -116,16 +116,14 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                         ->update($updateData);
 
                     if ($updated) {
-                        // Supprimer la clé Redis après traitement (utiliser Redis directement)
-                        $redis->del($fullKey);
+                        // Supprimer avec Cache qui gère le préfixe
+                        Cache::forget($simpleKey);
                         $processed++;
                         Log::info("Session {$data['session_id']} traitée et mise à jour avec succès");
                     } else {
                         Log::warning("Aucune session trouvée pour ID {$data['session_id']} et user {$data['user_id']}");
                     }
                 }
-avec Cache qui gère le préfixe
-                        Cache::forget($simple
 
             } catch (\Exception $e) {
                 DB::rollBack();
