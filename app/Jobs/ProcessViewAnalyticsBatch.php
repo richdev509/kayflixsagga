@@ -111,17 +111,31 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                         $updateData['ended_at'] = date('Y-m-d H:i:s', $data['ended_at']);
                     }
 
+                    // Vérifier que la session existe d'abord
+                    $session = ViewAnalytic::where('id', $data['session_id'])
+                        ->where('user_id', $data['user_id'])
+                        ->first();
+
+                    if (!$session) {
+                        Log::warning("Session introuvable: ID {$data['session_id']}, user {$data['user_id']}");
+                        continue;
+                    }
+
+                    Log::info("Session trouvée: ID {$session->id}, durée actuelle: {$session->duration_watched}s, nouvelle: {$data['duration_watched']}s");
+
                     $updated = ViewAnalytic::where('id', $data['session_id'])
                         ->where('user_id', $data['user_id'])
                         ->update($updateData);
 
-                    if ($updated) {
+                    Log::info("Lignes mises à jour: {$updated}");
+
+                    if ($updated > 0) {
                         // Supprimer avec Cache qui gère le préfixe
                         Cache::forget($simpleKey);
                         $processed++;
                         Log::info("Session {$data['session_id']} traitée et mise à jour avec succès");
                     } else {
-                        Log::warning("Aucune session trouvée pour ID {$data['session_id']} et user {$data['user_id']}");
+                        Log::warning("UPDATE n'a modifié aucune ligne pour session {$data['session_id']}");
                     }
                 }
 
