@@ -79,19 +79,22 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                 foreach ($chunk as $fullKey) {
                     Log::info("Traitement de la clé complète: {$fullKey}");
 
-                    // Utiliser Redis directement avec la clé complète (déjà avec préfixe)
-                    $rawData = $redis->get($fullKey);
+                    // Extraire la clé sans préfixe pour Cache
+                    preg_match('/(view_(?:progress|final):\d+)$/', $fullKey, $matches);
+                    $simpleKey = $matches[1] ?? null;
 
-                    if (!$rawData) {
-                        Log::warning("Données manquantes pour la clé complète: {$fullKey}");
+                    if (!$simpleKey) {
+                        Log::warning("Impossible d'extraire la clé simple de: {$fullKey}");
                         continue;
                     }
 
-                    // Décoder les données JSON
-                    $data = json_decode($rawData, true);
+                    // Utiliser Cache qui gère le préfixe automatiquement
+                    $data = Cache::get($simpleKey);
 
-                    if (!$data || !isset($data['session_id'])) {
-                        Log::warning("Données invalides pour la clé: {$fullKey}, données: " . $rawData);
+                    Log::info("Clé simple extraite: {$simpleKey}, données: " . json_encode($data));
+
+                    if (!$data || !is_array($data) || !isset($data['session_id'])) {
+                        Log::warning("Données invalides pour la clé: {$fullKey}");
                         continue;
                     }
 
@@ -121,8 +124,8 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                         Log::warning("Aucune session trouvée pour ID {$data['session_id']} et user {$data['user_id']}");
                     }
                 }
-
-                DB::commit();
+avec Cache qui gère le préfixe
+                        Cache::forget($simple
 
             } catch (\Exception $e) {
                 DB::rollBack();
