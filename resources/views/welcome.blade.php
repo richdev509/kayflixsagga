@@ -767,8 +767,9 @@
             .modal-content {
                 background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
                 border-radius: 25px;
-                padding: 50px;
-                max-width: 500px;
+                padding: 40px 30px;
+                max-width: 450px;
+                max-height: 85vh;
                 width: 90%;
                 text-align: center;
                 position: relative;
@@ -778,6 +779,23 @@
                     0 0 60px rgba(229, 9, 20, 0.4),
                     0 0 80px rgba(26, 77, 143, 0.3);
                 animation: slideUp 0.4s ease-out, borderGlow 4s ease-in-out infinite;
+                overflow-y: auto;
+            }
+
+            /* Desktop/Large screens */
+            @media (min-width: 769px) {
+                .modal-content {
+                    padding: 45px 35px;
+                    max-width: 500px;
+                    width: auto;
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .modal-content {
+                    padding: 50px 40px;
+                    max-width: 550px;
+                }
             }
 
             .modal-content::before {
@@ -825,15 +843,30 @@
 
             .modal-image {
                 width: 100%;
-                max-width: 300px;
+                max-width: 220px;
                 height: auto;
-                margin: 0 auto 30px;
+                margin: 0 auto 25px;
                 border-radius: 15px;
                 box-shadow:
                     0 10px 40px rgba(229, 9, 20, 0.4),
                     0 10px 60px rgba(26, 77, 143, 0.3);
                 position: relative;
                 animation: glowPulse 3s ease-in-out infinite;
+            }
+
+            /* Desktop image sizes */
+            @media (min-width: 769px) {
+                .modal-image {
+                    max-width: 240px;
+                    margin-bottom: 28px;
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .modal-image {
+                    max-width: 260px;
+                    margin-bottom: 30px;
+                }
             }
 
             .modal-image::before {
@@ -857,18 +890,39 @@
             }
 
             .modal-title {
-                font-size: 32px;
+                font-size: 28px;
                 font-weight: 700;
                 color: var(--primary);
-                margin-bottom: 20px;
+                margin-bottom: 18px;
                 filter: drop-shadow(0 0 20px var(--glow-primary));
             }
 
             .modal-message {
-                font-size: 18px;
+                font-size: 16px;
                 color: #b8b8d1;
                 line-height: 1.6;
                 margin-bottom: 25px;
+            }
+
+            /* Desktop text sizes */
+            @media (min-width: 769px) {
+                .modal-title {
+                    font-size: 30px;
+                }
+
+                .modal-message {
+                    font-size: 17px;
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .modal-title {
+                    font-size: 32px;
+                }
+
+                .modal-message {
+                    font-size: 18px;
+                }
             }
 
             .btn-whatsapp {
