@@ -65,7 +65,8 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
     {
         $batchSize = 100; // Traiter par lots de 100
         $processed = 0;
-        $redis = Cache::getRedis();
+        // Utiliser Redis::connection() pour éviter le double préfixe
+        $redis = Redis::connection()->client();
 
         // Diviser en chunks pour éviter les requêtes trop grosses
         $chunks = array_chunk($keys, $batchSize);
@@ -141,7 +142,8 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
     private function getRedisKeys(string $pattern): array
     {
         try {
-            $redis = Cache::getRedis();
+            // Utiliser Redis::connection()->client() pour connexion brute
+            $redis = Redis::connection()->client();
             $keys = [];
 
             // Récupérer le préfixe Redis configuré
