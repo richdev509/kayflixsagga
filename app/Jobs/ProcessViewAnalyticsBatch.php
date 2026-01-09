@@ -139,6 +139,9 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                     }
                 }
 
+                // Commiter la transaction si tout s'est bien passé
+                DB::commit();
+
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error('Erreur lors du traitement batch: ' . $e->getMessage());
