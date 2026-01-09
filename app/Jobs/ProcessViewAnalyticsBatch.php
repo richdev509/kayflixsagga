@@ -65,6 +65,7 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
     {
         $batchSize = 100; // Traiter par lots de 100
         $processed = 0;
+        $redis = Cache::getRedis();
 
         // Diviser en chunks pour éviter les requêtes trop grosses
         $chunks = array_chunk($keys, $batchSize);
@@ -74,22 +75,25 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
 
             try {
                 foreach ($chunk as $fullKey) {
-                    // Extraire le nom de clé simple depuis la clé complète Laravel
-                    // Ex: "laravel-database-laravel-cache-view_final:7" -> "view_final:7"
-                    preg_match('/(view_(?:progress|final):\d+)$/', $fullKey, $matches);
-                    $key = $matches[1] ?? null;
+                    Log::info("Traitement de la clé complète: {$fullKey}");
 
-                    if (!$key) {
-                        Log::warning("Impossible d'extraire la clé de: {$fullKey}");
+                    // Utiliser Redis directement avec la clé complète (déjà avec préfixe)
+                    $rawData = $redis->get($fullKey);
+
+                    if (!$rawData) {
+                        Log::warning("Données manquantes pour la clé complète: {$fullKey}");
                         continue;
                     }
 
-                    $data = cache()->get($key);
+                    // Décoder les données JSON
+                    $data = json_decode($rawData, true);
 
                     if (!$data || !isset($data['session_id'])) {
-                        Log::warning("Données manquantes pour la clé: {$key}");
+                        Log::warning("Données invalides pour la clé: {$fullKey}, données: " . $rawData);
                         continue;
                     }
+
+                    Log::info("Données récupérées pour session {$data['session_id']}: durée = {$data['duration_watched']}s");
 
                     $updateData = [
                         'duration_watched' => $data['duration_watched'],
@@ -102,15 +106,18 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
                         $updateData['ended_at'] = date('Y-m-d H:i:s', $data['ended_at']);
                     }
 
-                    ViewAnalytic::where('id', $data['session_id'])
+                    $updated = ViewAnalytic::where('id', $data['session_id'])
                         ->where('user_id', $data['user_id'])
                         ->update($updateData);
 
-                    // Supprimer la clé Redis après traitement
-                    cache()->forget($key);
-                    $processed++;
-
-                    Log::info("Session {$data['session_id']} traitée avec succès");
+                    if ($updated) {
+                        // Supprimer la clé Redis après traitement (utiliser Redis directement)
+                        $redis->del($fullKey);
+                        $processed++;
+                        Log::info("Session {$data['session_id']} traitée et mise à jour avec succès");
+                    } else {
+                        Log::warning("Aucune session trouvée pour ID {$data['session_id']} et user {$data['user_id']}");
+                    }
                 }
 
                 DB::commit();
@@ -137,14 +144,22 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
             $redis = Cache::getRedis();
             $keys = [];
 
-            // Predis supporte keys() via __call(), pas besoin de method_exists
-            $allKeys = $redis->keys('*' . $pattern . '*');
+            // Récupérer le préfixe Redis configuré
+            $prefix = config('database.redis.options.prefix', '');
+
+            // Chercher avec le préfixe complet
+            $searchPattern = '*' . $pattern . '*';
+            $allKeys = $redis->keys($searchPattern);
+
+            Log::info("Recherche Redis avec pattern: {$searchPattern}, préfixe: {$prefix}");
+            Log::info("Nombre de clés brutes trouvées: " . count($allKeys));
 
             // Filtrer pour garder uniquement celles qui correspondent au pattern exact
             foreach ($allKeys as $key) {
                 // Vérifier que c'est bien view_progress:X ou view_final:X
                 if (preg_match('/' . preg_quote($pattern, '/') . ':\d+/', $key)) {
                     $keys[] = $key;
+                    Log::info("Clé Redis valide trouvée: {$key}");
                 }
             }
 
@@ -154,6 +169,7 @@ class ProcessViewAnalyticsBatch implements ShouldQueue
 
         } catch (\Exception $e) {
             Log::error('Erreur récupération clés Redis: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
             return [];
         }
     }
