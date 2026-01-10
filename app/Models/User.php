@@ -68,7 +68,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Subscription::class)
             ->where('status', 'active')
-            ->where('end_date', '>=', now());
+            ->where('expires_at', '>=', now());
     }
 
     public function isCreator()

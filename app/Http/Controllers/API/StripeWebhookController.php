@@ -174,8 +174,14 @@ class StripeWebhookController extends Controller
         $subscription = Subscription::where('stripe_subscription_id', $stripeSubscription->id)->first();
 
         if ($subscription) {
+            // L'abonnement est complètement terminé (fin de période)
             $subscription->update([
-                'status' => 'cancelled',
+                'status' => 'expired',
+            ]);
+
+            Log::info('Subscription marked as expired', [
+                'subscription_id' => $subscription->id,
+                'user_id' => $subscription->user_id,
             ]);
         }
     }

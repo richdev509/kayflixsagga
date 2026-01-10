@@ -45,37 +45,44 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // Videos
-    Route::get('/videos', [VideoController::class, 'index']);
-    Route::get('/videos/{id}', [VideoController::class, 'show']);
-    Route::get('/videos/{id}/play', [VideoController::class, 'play']);
-    Route::post('/videos/{id}/watch', [VideoController::class, 'logWatch']);
-    Route::post('/videos/{id}/increment-views', [VideoController::class, 'incrementViews']);
-    Route::post('/videos', [VideoController::class, 'store']);
-
-    // Series
-    Route::get('/series', [SeriesController::class, 'index']);
-    Route::get('/series/search', [SeriesController::class, 'search']);
-    Route::get('/series/category/{category}', [SeriesController::class, 'byCategory']);
-    Route::get('/series/{id}', [SeriesController::class, 'show']);
-    Route::get('/series/{seriesId}/seasons/{seasonId}', [SeriesController::class, 'getSeasonEpisodes']);
-    Route::get('/series/{seriesId}/seasons/{seasonId}/episodes/{episodeId}', [SeriesController::class, 'getEpisode']);
-
-    // Creator routes
-    Route::post('/creator/apply', [CreatorController::class, 'apply']);
-    Route::get('/creator/revenue', [CreatorController::class, 'revenue']);
-    Route::post('/creator/upload', [CreatorController::class, 'uploadVideo']);
-
-    // Subscription routes
-    Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
+    // Subscription status (accessible même sans abonnement actif)
     Route::get('/subscription/status', [SubscriptionController::class, 'status']);
 
-    // View Analytics routes
-    Route::post('/analytics/view/start', [ViewAnalyticController::class, 'start']);
-    Route::put('/analytics/view/{sessionId}', [ViewAnalyticController::class, 'update']);
-    Route::post('/analytics/view/{sessionId}/end', [ViewAnalyticController::class, 'end']);
-    Route::get('/analytics/creator/{creatorId}/stats', [ViewAnalyticController::class, 'creatorStats']);
-    Route::get('/analytics/video/{videoId}/stats', [ViewAnalyticController::class, 'videoStats']);
-    Route::get('/analytics/series/{seriesId}/stats', [ViewAnalyticController::class, 'seriesStats']);
-    Route::get('/analytics/episode/{episodeId}/stats', [ViewAnalyticController::class, 'episodeStats']);
+    // Routes nécessitant un abonnement actif
+    Route::middleware('subscription')->group(function () {
+        // Videos
+        Route::get('/videos', [VideoController::class, 'index']);
+        Route::get('/videos/{id}', [VideoController::class, 'show']);
+        Route::get('/videos/{id}/play', [VideoController::class, 'play']);
+        Route::post('/videos/{id}/watch', [VideoController::class, 'logWatch']);
+        Route::post('/videos/{id}/increment-views', [VideoController::class, 'incrementViews']);
+        Route::post('/videos', [VideoController::class, 'store']);
+
+        // Series
+        Route::get('/series', [SeriesController::class, 'index']);
+        Route::get('/series/search', [SeriesController::class, 'search']);
+        Route::get('/series/category/{category}', [SeriesController::class, 'byCategory']);
+        Route::get('/series/{id}', [SeriesController::class, 'show']);
+        Route::get('/series/{seriesId}/seasons/{seasonId}', [SeriesController::class, 'getSeasonEpisodes']);
+        Route::get('/series/{seriesId}/seasons/{seasonId}/episodes/{episodeId}', [SeriesController::class, 'getEpisode']);
+
+        // Creator routes
+        Route::post('/creator/apply', [CreatorController::class, 'apply']);
+        Route::get('/creator/revenue', [CreatorController::class, 'revenue']);
+        Route::post('/creator/upload', [CreatorController::class, 'uploadVideo']);
+
+        // View Analytics routes
+        Route::post('/analytics/view/start', [ViewAnalyticController::class, 'start']);
+        Route::put('/analytics/view/{sessionId}', [ViewAnalyticController::class, 'update']);
+        Route::post('/analytics/view/{sessionId}/end', [ViewAnalyticController::class, 'end']);
+        Route::get('/analytics/creator/{creatorId}/stats', [ViewAnalyticController::class, 'creatorStats']);
+        Route::get('/analytics/video/{videoId}/stats', [ViewAnalyticController::class, 'videoStats']);
+        Route::get('/analytics/series/{seriesId}/stats', [ViewAnalyticController::class, 'seriesStats']);
+        Route::get('/analytics/episode/{episodeId}/stats', [ViewAnalyticController::class, 'episodeStats']);
+    });
+
+    // Subscription routes (pour renouveler)
+    Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
+    Route::post('/subscription/cancel', [SubscriptionController::class, 'cancel']);
+    Route::post('/subscription/reactivate', [SubscriptionController::class, 'reactivate']);
 });
