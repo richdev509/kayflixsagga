@@ -13,16 +13,16 @@
         border-radius: 10px;
         border: 2px dashed #dee2e6;
     }
-    
+
     .upload-progress-container.active {
         display: block;
         border-color: #E50914;
     }
-    
+
     .progress-step {
         margin-bottom: 15px;
     }
-    
+
     .progress-step .step-label {
         display: flex;
         justify-content: space-between;
@@ -30,7 +30,7 @@
         margin-bottom: 5px;
         font-weight: 500;
     }
-    
+
     .progress-step .step-label .status-icon {
         width: 20px;
         height: 20px;
@@ -38,55 +38,55 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .progress-step .step-label .status-icon.pending {
         color: #6c757d;
     }
-    
+
     .progress-step .step-label .status-icon.processing {
         color: #0d6efd;
     }
-    
+
     .progress-step .step-label .status-icon.completed {
         color: #198754;
     }
-    
+
     .progress-step .step-label .status-icon.error {
         color: #dc3545;
     }
-    
+
     .progress {
         height: 25px;
         background-color: #e9ecef;
     }
-    
+
     .progress-bar {
         font-size: 12px;
         line-height: 25px;
     }
-    
+
     .file-info {
         background: white;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 15px;
     }
-    
+
     .file-info-item {
         display: flex;
         justify-content: space-between;
         margin-bottom: 5px;
         font-size: 14px;
     }
-    
+
     .file-info-item .label {
         color: #6c757d;
     }
-    
+
     .file-info-item .value {
         font-weight: 600;
     }
-    
+
     .upload-error {
         background: #f8d7da;
         border: 1px solid #f5c2c7;
@@ -95,7 +95,7 @@
         border-radius: 8px;
         margin-top: 15px;
     }
-    
+
     .upload-success {
         background: #d1e7dd;
         border: 1px solid #badbcc;
@@ -135,7 +135,7 @@
                     <!-- Titre -->
                     <div class="mb-3">
                         <label for="title" class="form-label">Titre de la vidéo <span class="text-danger">*</span></label>
-                        <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror" 
+                        <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror"
                                value="{{ old('title') }}" required placeholder="Ex: Introduction à Laravel">
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -145,8 +145,8 @@
                     <!-- Description -->
                     <div class="mb-3">
                         <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                        <textarea name="description" id="description" rows="4" 
-                                  class="form-control @error('description') is-invalid @enderror" 
+                        <textarea name="description" id="description" rows="4"
+                                  class="form-control @error('description') is-invalid @enderror"
                                   required placeholder="Décrivez le contenu de la vidéo...">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -158,14 +158,14 @@
                         <label for="category" class="form-label">Catégorie <span class="text-danger">*</span></label>
                         <select name="category" id="category" class="form-select @error('category') is-invalid @enderror" required>
                             <option value="">-- Sélectionner une catégorie --</option>
-                            <option value="tech" {{ old('category') == 'tech' ? 'selected' : '' }}>Technologie</option>
-                            <option value="education" {{ old('category') == 'education' ? 'selected' : '' }}>Éducation</option>
-                            <option value="entertainment" {{ old('category') == 'entertainment' ? 'selected' : '' }}>Divertissement</option>
-                            <option value="music" {{ old('category') == 'music' ? 'selected' : '' }}>Musique</option>
-                            <option value="sports" {{ old('category') == 'sports' ? 'selected' : '' }}>Sports</option>
-                            <option value="gaming" {{ old('category') == 'gaming' ? 'selected' : '' }}>Gaming</option>
-                            <option value="news" {{ old('category') == 'news' ? 'selected' : '' }}>Actualités</option>
-                            <option value="other" {{ old('category') == 'other' ? 'selected' : '' }}>Autre</option>
+                            <option value="Action" {{ old('category') == 'Action' ? 'selected' : '' }}>Action</option>
+                            <option value="Comédie" {{ old('category') == 'Comédie' ? 'selected' : '' }}>Comédie</option>
+                            <option value="Drame" {{ old('category') == 'Drame' ? 'selected' : '' }}>Drame</option>
+                            <option value="Science-Fiction" {{ old('category') == 'Science-Fiction' ? 'selected' : '' }}>Science-Fiction</option>
+                            <option value="Thriller" {{ old('category') == 'Thriller' ? 'selected' : '' }}>Thriller</option>
+                            <option value="Horreur" {{ old('category') == 'Horreur' ? 'selected' : '' }}>Horreur</option>
+                            <option value="Romance" {{ old('category') == 'Romance' ? 'selected' : '' }}>Romance</option>
+                            <option value="Documentaire" {{ old('category') == 'Documentaire' ? 'selected' : '' }}>Documentaire</option>
                         </select>
                         @error('category')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -175,8 +175,8 @@
                     <!-- Fichier vidéo -->
                     <div class="mb-3">
                         <label for="video_file" class="form-label">Fichier vidéo <span class="text-danger">*</span></label>
-                        <input type="file" name="video_file" id="video_file" 
-                               class="form-control @error('video_file') is-invalid @enderror" 
+                        <input type="file" name="video_file" id="video_file"
+                               class="form-control @error('video_file') is-invalid @enderror"
                                accept="video/mp4,video/mov,video/avi,video/wmv" required>
                         <div class="form-text">
                             Formats acceptés: MP4, MOV, AVI, WMV. Taille max: 2GB
@@ -189,8 +189,8 @@
                     <!-- Thumbnail (optionnel) -->
                     <div class="mb-3">
                         <label for="thumbnail" class="form-label">Miniature (optionnel)</label>
-                        <input type="file" name="thumbnail" id="thumbnail" 
-                               class="form-control @error('thumbnail') is-invalid @enderror" 
+                        <input type="file" name="thumbnail" id="thumbnail"
+                               class="form-control @error('thumbnail') is-invalid @enderror"
                                accept="image/*">
                         <div class="form-text">
                             Si non fournie, Bunny.net générera automatiquement une miniature
@@ -211,7 +211,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 <!-- Upload Progress Container -->
                 <div id="uploadProgressContainer" class="upload-progress-container">
                     <!-- File Info -->
@@ -241,7 +241,7 @@
                             <span class="text-muted" id="step1Progress">0%</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
                                  role="progressbar" style="width: 0%" id="step1Bar">0%</div>
                         </div>
                     </div>
@@ -256,14 +256,14 @@
                             <span class="text-muted" id="step2Progress">En attente</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                                  role="progressbar" style="width: 0%" id="step2Bar">0%</div>
                         </div>
                     </div>
 
                     <!-- Error Message -->
                     <div id="uploadError" class="upload-error" style="display: none;"></div>
-                    
+
                     <!-- Success Message -->
                     <div id="uploadSuccess" class="upload-success" style="display: none;"></div>
                 </div>
@@ -293,7 +293,7 @@ document.getElementById('thumbnail').addEventListener('change', function(e) {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('thumbnailPreview').innerHTML = 
+            document.getElementById('thumbnailPreview').innerHTML =
                 '<img src="' + e.target.result + '" class="img-thumbnail" style="max-width: 200px;">';
         };
         reader.readAsDataURL(file);
@@ -326,9 +326,9 @@ function simulateProgress(stepNum, duration) {
         const interval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             const progress = Math.min((elapsed / duration) * 100, 100);
-            
+
             updateStep(stepNum, 'processing', progress);
-            
+
             if (progress >= 100) {
                 clearInterval(interval);
                 resolve();
@@ -343,13 +343,13 @@ function updateStep(stepNum, status, progress = null, message = null) {
     const icon = document.getElementById(`step${stepNum}Icon`);
     const progressText = document.getElementById(`step${stepNum}Progress`);
     const progressBar = document.getElementById(`step${stepNum}Bar`);
-    
+
     step.style.opacity = '1';
-    
+
     // Remove all status classes
     icon.classList.remove('fa-circle', 'fa-circle-notch', 'fa-spin', 'fa-check-circle', 'fa-times-circle');
     icon.classList.remove('pending', 'processing', 'completed', 'error');
-    
+
     switch(status) {
         case 'processing':
             icon.classList.add('fa-circle-notch', 'fa-spin', 'processing');
@@ -381,7 +381,7 @@ function showError(message) {
     const errorDiv = document.getElementById('uploadError');
     errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>' + message;
     errorDiv.style.display = 'block';
-    
+
     document.getElementById('submitBtn').disabled = false;
     document.getElementById('submitBtn').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploader la vidéo';
     document.getElementById('cancelBtn').style.display = 'inline-block';
@@ -391,10 +391,10 @@ function showError(message) {
 // Show success
 function showSuccess(message, videoId) {
     const successDiv = document.getElementById('uploadSuccess');
-    successDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + message + 
+    successDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + message +
                            '<br><small>Redirection dans 3 secondes...</small>';
     successDiv.style.display = 'block';
-    
+
     setTimeout(() => {
         window.location.href = `/admin/videos/${videoId}`;
     }, 3000);
@@ -403,47 +403,47 @@ function showSuccess(message, videoId) {
 // Handle form submission
 document.getElementById('videoUploadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     if (uploadInProgress) {
         alert('Un upload est déjà en cours...');
         return;
     }
-    
+
     // Validate form
     const form = e.target;
     if (!form.checkValidity()) {
         form.reportValidity();
         return;
     }
-    
+
     uploadInProgress = true;
-    
+
     // Get form data
     const formData = new FormData(form);
     const videoFile = document.getElementById('video_file').files[0];
-    
+
     if (!videoFile) {
         alert('Veuillez sélectionner un fichier vidéo');
         uploadInProgress = false;
         return;
     }
-    
+
     // Show progress container
     document.getElementById('uploadProgressContainer').classList.add('active');
     document.getElementById('fileInfo').style.display = 'block';
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Upload en cours...';
     document.getElementById('cancelBtn').style.display = 'none';
-    
+
     // Scroll to progress
     document.getElementById('uploadProgressContainer').scrollIntoView({ behavior: 'smooth' });
-    
+
     try {
         // Step 1: Upload to server with progress
         updateStep(1, 'processing', 0);
-        
+
         const xhr = new XMLHttpRequest();
-        
+
         // Track upload progress
         xhr.upload.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
@@ -451,12 +451,12 @@ document.getElementById('videoUploadForm').addEventListener('submit', async func
                 updateStep(1, 'processing', percentComplete);
             }
         });
-        
+
         // Handle completion
         xhr.addEventListener('load', async function() {
             if (xhr.status === 200 || xhr.status === 201) {
                 updateStep(1, 'completed');
-                
+
                 let response;
                 try {
                     response = JSON.parse(xhr.responseText);
@@ -465,7 +465,7 @@ document.getElementById('videoUploadForm').addEventListener('submit', async func
                     showError('Erreur: Réponse invalide du serveur');
                     return;
                 }
-                
+
                 if (response.success) {
                     // Step 2: Traitement Bunny.net (simulé)
                     updateStep(2, 'processing', 0);
@@ -473,7 +473,7 @@ document.getElementById('videoUploadForm').addEventListener('submit', async func
                     const uploadTime = Math.max(2000, Math.min(fileSize / 1024 / 1024 * 500, 8000)); // 500ms par MB, max 8s
                     await simulateProgress(2, uploadTime);
                     updateStep(2, 'completed');
-                    
+
                     showSuccess(response.message || 'Vidéo uploadée avec succès!', response.video_id);
                 } else {
                     showError(response.message || 'Erreur lors de l\'upload');
@@ -489,20 +489,20 @@ document.getElementById('videoUploadForm').addEventListener('submit', async func
                 updateStep(1, 'error', null, 'Erreur');
             }
         });
-        
+
         // Handle error
         xhr.addEventListener('error', function() {
             showError('Erreur réseau lors de l\'upload');
             updateStep(1, 'error', null, 'Erreur réseau');
         });
-        
+
         // Send request
         xhr.open('POST', '{{ route('admin.videos.store') }}', true);
         xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Force AJAX detection
         xhr.setRequestHeader('Accept', 'application/json'); // Request JSON response
         xhr.send(formData);
-        
+
     } catch (error) {
         console.error('Upload error:', error);
         showError('Erreur: ' + error.message);

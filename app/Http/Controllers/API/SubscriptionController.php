@@ -90,7 +90,7 @@ class SubscriptionController extends Controller
 
         // Chercher un abonnement actif ou annulé mais encore valide
         $subscription = $user->subscriptions()
-            ->whereIn('status', ['active', 'canceled'])
+            ->whereIn('status', ['active', 'cancelled'])
             ->where('expires_at', '>=', now())
             ->orderBy('expires_at', 'desc')
             ->first();
@@ -110,11 +110,11 @@ class SubscriptionController extends Controller
         ]);
 
         return response()->json([
-            'has_active_subscription' => $subscription->status === 'active',
+            'has_active_subscription' => true, // L'utilisateur a accès tant que expires_at est valide
             'subscription' => $subscription->load('plan'),
             'days_remaining' => now()->diffInDays($subscription->expires_at),
             'will_renew' => $subscription->status === 'active',
-            'cancel_at_period_end' => $subscription->status === 'canceled',
+            'cancel_at_period_end' => $subscription->status === 'cancelled',
         ]);
     }
 
@@ -172,7 +172,7 @@ class SubscriptionController extends Controller
     {
         $user = $request->user();
         $subscription = $user->subscriptions()
-            ->where('status', 'canceled')
+            ->where('status', 'cancelled')
             ->where('expires_at', '>=', now())
             ->first();
 
