@@ -16,6 +16,7 @@ use App\Http\Controllers\API\ViewAnalyticController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/check-email', [AuthController::class, 'checkEmail']);
 
 // Public subscription plans
 Route::get('/subscription-plans', [SubscriptionController::class, 'plans']);

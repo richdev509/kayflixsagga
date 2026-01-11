@@ -75,5 +75,22 @@ class AuthController extends Controller
             'user' => $request->user()->load('roles', 'creator', 'activeSubscription'),
         ]);
     }
+
+    /**
+     * Check if email already exists
+     */
+    public function checkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $exists = User::where('email', $request->email)->exists();
+
+        return response()->json([
+            'exists' => $exists,
+            'message' => $exists ? 'Cet email est déjà utilisé' : 'Email disponible'
+        ]);
+    }
 }
 
