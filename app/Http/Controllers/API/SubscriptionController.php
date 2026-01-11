@@ -7,6 +7,9 @@ use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Stripe\Checkout\Session as StripeSession;
+use Stripe\BillingPortal\Session as BillingPortalSession;
+use Stripe\Stripe;
 
 class SubscriptionController extends Controller
 {
@@ -73,14 +76,14 @@ class SubscriptionController extends Controller
         $user = $request->user();
 
         // Debug: Log user info
-        \Log::info('Getting subscription status', [
+        Log::info('Getting subscription status', [
             'user_id' => $user->id,
             'email' => $user->email,
         ]);
 
         // Récupérer tous les abonnements de l'utilisateur
         $allSubscriptions = $user->subscriptions()->get();
-        \Log::info('All user subscriptions', [
+        Log::info('All user subscriptions', [
             'count' => $allSubscriptions->count(),
             'subscriptions' => $allSubscriptions->toArray(),
         ]);
@@ -93,14 +96,14 @@ class SubscriptionController extends Controller
             ->first();
 
         if (!$subscription) {
-            \Log::info('No active subscription found for user ' . $user->id);
+            Log::info('No active subscription found for user ' . $user->id);
             return response()->json([
                 'has_active_subscription' => false,
                 'message' => 'Aucun abonnement actif',
             ]);
         }
 
-        \Log::info('Found subscription', [
+        Log::info('Found subscription', [
             'subscription_id' => $subscription->id,
             'status' => $subscription->status,
             'expires_at' => $subscription->expires_at,
@@ -207,5 +210,103 @@ class SubscriptionController extends Controller
             ], 500);
         }
     }
-}
 
+    /**
+     * Create checkout session for subscription upgrade
+     */
+    public function upgrade(Request $request)
+    {
+        Stripe::setApiKey(config('stripe.secret'));
+
+        $request->validate([
+            'plan_id' => 'required|exists:subscription_plans,id',
+        ]);
+
+        $user = $request->user();
+        $newPlan = SubscriptionPlan::findOrFail($request->plan_id);
+
+        if (!$newPlan->stripe_price_id) {
+            return response()->json([
+                'message' => 'Ce plan n\'a pas de prix Stripe configuré',
+            ], 400);
+        }
+
+        try {
+            // Créer une session Stripe Checkout pour l'upgrade
+            $session = StripeSession::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price' => $newPlan->stripe_price_id,
+                    'quantity' => 1,
+                ]],
+                'mode' => 'subscription',
+                'success_url' => config('app.url') . '/payment/success?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => config('app.url') . '/payment/cancel',
+                'customer_email' => $user->email,
+                'client_reference_id' => $user->id,
+                'metadata' => [
+                    'user_id' => $user->id,
+                    'plan_id' => $newPlan->id,
+                    'upgrade' => 'true',
+                ],
+            ]);
+
+            Log::info('Upgrade checkout session created', [
+                'user_id' => $user->id,
+                'plan_id' => $newPlan->id,
+                'session_id' => $session->id,
+            ]);
+
+            return response()->json([
+                'checkout_url' => $session->url,
+                'session_id' => $session->id,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Upgrade checkout error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Erreur lors de la création de la session de paiement',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Create Stripe Customer Portal session for payment method management
+     */
+    public function createPortalSession(Request $request)
+    {
+        Stripe::setApiKey(config('stripe.secret'));
+
+        $user = $request->user();
+
+        if (!$user->stripe_customer_id) {
+            return response()->json([
+                'message' => 'Aucun compte Stripe associé à cet utilisateur',
+            ], 400);
+        }
+
+        try {
+            // Créer une session du portail client Stripe
+            $session = BillingPortalSession::create([
+                'customer' => $user->stripe_customer_id,
+                'return_url' => config('app.frontend_url', 'https://mykayflix.com') . '/subscription/success',
+            ]);
+
+            Log::info('Customer portal session created', [
+                'user_id' => $user->id,
+                'customer_id' => $user->stripe_customer_id,
+                'session_id' => $session->id,
+            ]);
+
+            return response()->json([
+                'portal_url' => $session->url,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Customer portal error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Erreur lors de la création du portail de gestion',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+}

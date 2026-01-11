@@ -85,4 +85,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
     Route::post('/subscription/cancel', [SubscriptionController::class, 'cancel']);
     Route::post('/subscription/reactivate', [SubscriptionController::class, 'reactivate']);
+    Route::post('/subscription/upgrade', [SubscriptionController::class, 'upgrade']);
+    Route::post('/subscription/create-portal-session', [SubscriptionController::class, 'createPortalSession']);
 });
