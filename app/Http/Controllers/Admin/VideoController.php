@@ -93,21 +93,50 @@ class VideoController extends Controller
                         'mime' => $thumbnailFile->getMimeType()
                     ]);
 
-                    $thumbnailPath = $thumbnailFile->store('thumbnails', 'public');
+                    // Vérifier les permissions du dossier
+                    $thumbnailsDir = storage_path('app/public/thumbnails');
+                    Log::info('Checking thumbnails directory', [
+                        'path' => $thumbnailsDir,
+                        'exists' => file_exists($thumbnailsDir),
+                        'writable' => is_writable($thumbnailsDir),
+                        'permissions' => file_exists($thumbnailsDir) ? substr(sprintf('%o', fileperms($thumbnailsDir)), -4) : 'N/A'
+                    ]);
+
+                    if (!file_exists($thumbnailsDir)) {
+                        mkdir($thumbnailsDir, 0755, true);
+                        Log::info('Created thumbnails directory');
+                    }
+
+                    // Générer un nom unique pour le fichier
+                    $filename = time() . '_' . Str::random(10) . '.' . $thumbnailFile->getClientOriginalExtension();
+                    $fullPath = $thumbnailsDir . '/' . $filename;
+
+                    Log::info('Attempting to save file', [
+                        'filename' => $filename,
+                        'full_path' => $fullPath
+                    ]);
+
+                    $thumbnailPath = $thumbnailFile->storeAs('thumbnails', $filename, 'public');
 
                     if ($thumbnailPath) {
                         $thumbnailUrl = Storage::url($thumbnailPath);
                         Log::info('Thumbnail uploaded successfully', [
                             'path' => $thumbnailPath,
-                            'url' => $thumbnailUrl
+                            'url' => $thumbnailUrl,
+                            'file_exists' => file_exists(storage_path('app/public/' . $thumbnailPath))
                         ]);
                     } else {
-                        Log::error('Failed to store thumbnail file');
+                        Log::error('storeAs returned false', [
+                            'temp_path' => $thumbnailFile->getRealPath(),
+                            'is_valid' => $thumbnailFile->isValid(),
+                            'error' => $thumbnailFile->getError()
+                        ]);
                     }
                 } catch (\Exception $e) {
                     Log::error('Thumbnail upload error', [
                         'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
                     ]);
                 }
             } else {
