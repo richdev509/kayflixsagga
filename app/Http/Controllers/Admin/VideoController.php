@@ -52,7 +52,7 @@ class VideoController extends Controller
         try {
             // 1. Créer la vidéo dans Bunny.net
             $bunnyVideo = $this->bunnyService->createVideo($request->title);
-            
+
             if (!$bunnyVideo || !isset($bunnyVideo['guid'])) {
                 if ($request->expectsJson() || $request->ajax()) {
                     return response()->json([
@@ -66,7 +66,7 @@ class VideoController extends Controller
             // 2. Upload du fichier vidéo vers Bunny
             $videoFile = $request->file('video_file');
             $videoPath = $videoFile->getRealPath();
-            
+
             $uploadResult = $this->bunnyService->uploadVideo(
                 $bunnyVideo['guid'],
                 $videoPath
@@ -92,9 +92,9 @@ class VideoController extends Controller
                         'size' => $thumbnailFile->getSize(),
                         'mime' => $thumbnailFile->getMimeType()
                     ]);
-                    
+
                     $thumbnailPath = $thumbnailFile->store('thumbnails', 'public');
-                    
+
                     if ($thumbnailPath) {
                         $thumbnailUrl = Storage::url($thumbnailPath);
                         Log::info('Thumbnail uploaded successfully', [
@@ -145,14 +145,14 @@ class VideoController extends Controller
             \Log::error('Video upload error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Erreur: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             return back()->withErrors(['error' => 'Erreur: ' . $e->getMessage()]);
         }
     }
@@ -160,7 +160,7 @@ class VideoController extends Controller
     public function show(Video $video)
     {
         $video->load('creator.user');
-        
+
         // Récupérer les infos depuis Bunny
         $bunnyVideo = null;
         if ($video->bunny_video_id) {
@@ -258,7 +258,7 @@ class VideoController extends Controller
 
         try {
             $bunnyVideo = $this->bunnyService->getVideo($video->bunny_video_id);
-            
+
             if ($bunnyVideo && isset($bunnyVideo['status'])) {
                 $updates = [
                     'duration' => $bunnyVideo['length'] ?? $video->duration,
@@ -267,7 +267,7 @@ class VideoController extends Controller
                 // Si l'encodage est terminé, publier automatiquement
                 if ($bunnyVideo['status'] === 4) { // 4 = Encoded
                     $updates['is_published'] = true;
-                    
+
                     // Récupérer la thumbnail depuis Bunny si pas de thumbnail locale
                     if (!$video->thumbnail_url) {
                         $updates['thumbnail_url'] = $this->bunnyService->getThumbnailUrl($video->bunny_video_id);
