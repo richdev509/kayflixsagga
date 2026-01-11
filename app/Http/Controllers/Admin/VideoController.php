@@ -8,6 +8,7 @@ use App\Models\Creator;
 use App\Services\BunnyStreamService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class VideoController extends Controller
@@ -84,8 +85,33 @@ class VideoController extends Controller
             // 3. Upload de la thumbnail si fournie
             $thumbnailUrl = null;
             if ($request->hasFile('thumbnail')) {
-                $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
-                $thumbnailUrl = Storage::url($thumbnailPath);
+                try {
+                    $thumbnailFile = $request->file('thumbnail');
+                    Log::info('Uploading thumbnail', [
+                        'original_name' => $thumbnailFile->getClientOriginalName(),
+                        'size' => $thumbnailFile->getSize(),
+                        'mime' => $thumbnailFile->getMimeType()
+                    ]);
+                    
+                    $thumbnailPath = $thumbnailFile->store('thumbnails', 'public');
+                    
+                    if ($thumbnailPath) {
+                        $thumbnailUrl = Storage::url($thumbnailPath);
+                        Log::info('Thumbnail uploaded successfully', [
+                            'path' => $thumbnailPath,
+                            'url' => $thumbnailUrl
+                        ]);
+                    } else {
+                        Log::error('Failed to store thumbnail file');
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Thumbnail upload error', [
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
+            } else {
+                Log::warning('No thumbnail file in request');
             }
 
             // 4. Créer l'entrée dans la base de données
